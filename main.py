@@ -11,6 +11,11 @@ class Note:
 
 
 def main():
+    # https://stackoverflow.com/a/60634040/14458327
+    # This makes it possible to do: python main.py > notes.md
+    # It also makes it work with grep etc.
+    sys.stdout.reconfigure(encoding='utf-8')
+
     for note in load_notes(Path("Keep")):
         print_note(note)
 
