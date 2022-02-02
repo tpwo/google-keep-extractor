@@ -15,7 +15,7 @@ It will be a `.zip` or `.tgz` archive with the following structure:
 
 Please, copy `Takeout` folder into this repo root, and run the script:
 
-    python main.py
+    python google_keep_extractor.py
 
 Python 3.7 or later is needed. No additional packages are required.
 
