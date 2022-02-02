@@ -10,7 +10,7 @@ It will be a `.zip` or `.tgz` archive with the following structure:
 
     └── Takeout
         ├── Keep
-        │   ├── JSON, HTML, and attachments
+        │   ├── JSON & HTML files, and attachments
         └── archive_browser.html
 
 Please, copy `Takeout` folder into this repo root, and run the script:
@@ -19,7 +19,7 @@ Please, copy `Takeout` folder into this repo root, and run the script:
 
 Python 3.7 or later is needed. No additional packages are required.
 
-After running the script, Markdown file with timestamp in filename in
+After running the script, Markdown file with timestamp in filename is
 created in the `export` folder. This single file will contain all notes
 which will be separated with `---`.
 
