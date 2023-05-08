@@ -62,7 +62,7 @@ def _load_note(path: pathlib.Path) -> Note:
                 f"Note '{note_obj[JSON_NOTE_TITLE]}' "
                 f"from file '{path}' is trashed"
             )
-        return Note(title=_get_title(note_obj), text=note_obj[JSON_NOTE_TEXT])
+        return Note(title=_get_title(note_obj), text=_get_text(note_obj))
 
 
 def _get_title(note: dict[str, object]) -> str:
@@ -84,6 +84,27 @@ def _get_title(note: dict[str, object]) -> str:
     if note['isPinned']:
         title = f'[PINNED] {title}'
     return title
+
+
+def _get_text(note: dict[str, object]) -> str:
+    try:
+        text = note[JSON_NOTE_TEXT]
+        if not isinstance(text, str):
+            raise NotImplementedError
+        else:
+            return text
+    except KeyError:
+        items = []
+        print(
+            f"Note '{note[JSON_NOTE_TITLE]}' "
+            "doesn't have text content. Converting..."
+        )
+        if not isinstance(note['listContent'], list):
+            raise NotImplementedError
+        for item in note['listContent']:
+            checkbox = '[x]' if item['isChecked'] else '[ ]'
+            items.append(f"* {checkbox} {item['text']}")
+        return '\n'.join(items) + '\n'
 
 
 def _note_to_str(note: Note) -> str:
