@@ -30,6 +30,8 @@ def main():
         file.write(_get_md_header())
         for note in _load_notes(IMPORT_PATH):
             file.write(_note_to_str(note))
+    print('Export successful!')
+    print(f'File {EXPORT_PATH} saved.')
 
 
 def _get_md_header() -> str:
