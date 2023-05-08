@@ -1,28 +1,27 @@
 # Google Keep Extractor
 
-It will parse the JSON files and convert them to a big Markdown file.
+It parses JSON files from Keep export and converts them to a single
+structured Markdown file. Attachments and images are ignored.
 
-Backup can be manually downloaded via:
+You can download Google Keep backup file by visiting:
 
 <https://takeout.google.com/takeout/custom/keep?hl=en&continue=https://myaccount.google.com/dashboard>
 
-It will be a `.zip` or `.tgz` archive with the following structure:
+You can export data to a `.zip` or `.tgz` archive which has the following structure:
 
-    └── Takeout
-        ├── Keep
-        │   ├── JSON & HTML files, and attachments
-        └── archive_browser.html
+```
+└── Takeout
+    ├── Keep
+    │   ├── JSON & HTML files, and attachments
+    └── archive_browser.html
+```
 
-Please, copy `Takeout` folder into this repo root, and run the script:
+Copy `Takeout` folder into root of this repo, and run the script:
 
     python google_keep_extractor.py
 
 Python 3.8 or later is needed. No additional packages are required.
 
 After running the script, Markdown file with timestamp in filename is
-created in the `export` folder. This single file will contain all notes
-which will be separated with `---`.
-
-For a better readability in the source form, consider wrapping lines,
-e.g. with [Rewrap](https://github.com/stkb/Rewrap.git) extension
-available for VS Code.
+created in the `export` folder. This single file contains all notes
+separated with `---`.
