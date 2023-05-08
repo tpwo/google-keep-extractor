@@ -51,7 +51,7 @@ def _load_notes(folder: pathlib.Path) -> list[Note]:
                 notes.append(_load_note(item))
             except RuntimeError as err:
                 print(f"Skipping note: '{err}'")
-    return notes
+    return sorted(notes, key=lambda x: x.title.lower())
 
 
 def _load_note(path: pathlib.Path) -> Note:
