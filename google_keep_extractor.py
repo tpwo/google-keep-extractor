@@ -38,7 +38,7 @@ def _get_md_header() -> str:
     return (
         f'# Google Keep Export created at '
         f'{EXPORT_TIME.strftime(TITLE_TIME_FORMAT)}\n\n'
-        'Created with: <https://github.com/tpwo/google-keep-extractor.git>\n\n'
+        'Created with: <https://github.com/tpwo/google-keep-extractor>\n\n'
         '---\n\n'
     )
 
