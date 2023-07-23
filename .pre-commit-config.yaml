@@ -1,6 +1,6 @@
 repos:
 -   repo: https://github.com/asottile/reorder_python_imports
-    rev: v3.9.0
+    rev: v3.10.0
     hooks:
     -   id: reorder-python-imports
 -   repo: https://github.com/grantjenks/blue
@@ -17,7 +17,7 @@ repos:
     -   id: file-contents-sorter
         files: \.gitignore
 -   repo: https://github.com/asottile/pyupgrade
-    rev: v3.4.0
+    rev: v3.9.0
     hooks:
     -   id: pyupgrade
         args: [--py38-plus]
@@ -26,6 +26,6 @@ repos:
     hooks:
     -   id: flake8
 -   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.2.0
+    rev: v1.4.1
     hooks:
     -   id: mypy
