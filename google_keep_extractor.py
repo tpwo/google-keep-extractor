@@ -51,7 +51,7 @@ def _load_notes(folder: pathlib.Path) -> list[Note]:
                 notes.append(_load_note(item))
             except RuntimeError as err:
                 print(f"Skipping note: '{err}'")
-    return sorted(notes, key=lambda x: x.title.lower())
+    return sorted(notes, key=lambda x: x.title.lower(), reverse=True)
 
 
 def _load_note(path: pathlib.Path) -> Note:
@@ -70,20 +70,23 @@ def _get_title(note: dict[str, object]) -> str:
     timestamp_usec = note['createdTimestampUsec']
     if not isinstance(timestamp_usec, int):
         raise NotImplementedError
-    creation_date = datetime.fromtimestamp(timestamp_usec * usec_to_sec)
+    created_at = datetime.fromtimestamp(timestamp_usec * usec_to_sec).strftime(
+        TITLE_TIME_FORMAT
+    )
 
-    if note[JSON_NOTE_TITLE]:
+    if not note[JSON_NOTE_TITLE]:
+        return created_at
+    else:
         title = note[JSON_NOTE_TITLE]
         if not isinstance(title, str):
             raise NotImplementedError
-    else:
-        title = creation_date.strftime(TITLE_TIME_FORMAT)
 
-    if note['isArchived']:
-        title = f'[ARCHIVED] {title}'
-    if note['isPinned']:
-        title = f'[PINNED] {title}'
-    return title
+        if note['isArchived']:
+            return f'{created_at} -- [ARCHIVED] {title}'
+        elif note['isPinned']:
+            return f'{created_at} -- [PINNED] {title}'
+        else:
+            return f'{created_at} -- {title}'
 
 
 def _get_text(note: dict[str, object]) -> str:
