@@ -5,7 +5,7 @@ structured Markdown file. Attachments and images are ignored.
 
 You can download Google Keep backup file by visiting:
 
-<https://takeout.google.com/takeout/custom/keep?hl=en&continue=https://myaccount.google.com/dashboard>
+<https://takeout.google.com/takeout/custom/keep>
 
 You can export data to a `.zip` or `.tgz` archive which has the following structure:
 
