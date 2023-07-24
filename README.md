@@ -1,6 +1,6 @@
 # Google Keep Extractor
 
-It parses JSON files from Keep export and converts them to a single
+Parse JSON files from Keep export and convert them to a single
 structured Markdown file. Attachments and images are ignored.
 
 You can download Google Keep backup file by visiting:
