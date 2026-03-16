@@ -4,6 +4,17 @@ line-length = 79
 [tool.ruff.format]
 quote-style = "single"
 
+[tool.ruff.lint]
+extend-select = [
+    "I",
+    "E",
+    "F",
+    "W",
+    "UP",
+    "B",
+    "SIM",
+]
+
 [tool.ruff.lint.isort]
 required-imports = ["from __future__ import annotations"]
 force-single-line = true
