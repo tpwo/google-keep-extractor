@@ -79,7 +79,6 @@ def _get_title_and_date(note: dict[str, object]) -> tuple[str, datetime]:
     if not isinstance(timestamp_usec, int):
         raise NotImplementedError
     created_at = datetime.fromtimestamp(timestamp_usec * usec_to_sec)
-    created_at_str = created_at.strftime(TITLE_TIME_FORMAT)
 
     if not note[JSON_NOTE_TITLE]:
         title = ''
@@ -145,11 +144,6 @@ def _note_to_str(note: Note) -> str:
 
     Ends note content with a single newline as in common Unix standard.
     """
-    if note.title:
-        title = '# ' + note.title
-    else:
-        title = '# ' + note.created_at.strftime(TITLE_TIME_FORMAT)
-
     attachments_str = '\n'.join(
         f'![{pathlib.Path(attachment).name}](attachments/{attachment})'
         for attachment in note.attachments
