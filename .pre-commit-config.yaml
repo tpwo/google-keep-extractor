@@ -1,31 +1,20 @@
 repos:
--   repo: https://github.com/asottile/reorder_python_imports
-    rev: v3.10.0
-    hooks:
-    -   id: reorder-python-imports
--   repo: https://github.com/grantjenks/blue
-    rev: v0.9.1
-    hooks:
-    -   id: blue
--   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
-    hooks:
-    -   id: trailing-whitespace
-    -   id: end-of-file-fixer
-    -   id: check-docstring-first
-    -   id: debug-statements
-    -   id: file-contents-sorter
-        files: \.gitignore
--   repo: https://github.com/asottile/pyupgrade
-    rev: v3.9.0
-    hooks:
-    -   id: pyupgrade
-        args: [--py38-plus]
--   repo: https://github.com/pycqa/flake8
-    rev: 6.0.0
-    hooks:
-    -   id: flake8
--   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.4.1
-    hooks:
-    -   id: mypy
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.15.6
+  hooks:
+  - id: ruff-check
+    args: [--fix, --exit-non-zero-on-fix]
+  - id: ruff-format
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v6.0.0
+  hooks:
+  - id: trailing-whitespace
+  - id: end-of-file-fixer
+  - id: check-docstring-first
+  - id: debug-statements
+  - id: file-contents-sorter
+    files: \.gitignore
+- repo: https://github.com/pre-commit/mirrors-mypy
+  rev: v1.19.1
+  hooks:
+  - id: mypy
