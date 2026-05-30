@@ -29,6 +29,12 @@ After running the script, Markdown files with timestamp in the filename are crea
 - Includes attachments.
 - Writes Keep's Labels into the files.
 
-## Use Case
+## Use Cases
 
-Personally, I wanted to get these into Apple Notes. Notes supports RTFD imports of multiple files. I've used Bear (from the App Store) to import the Markdown files into it, and export RTF files. This was easier than tinkering with Pandoc.
+## Obsidian
+
+Export is a collection of Markdown files which can be easily imported into Obsidian vault.
+
+## Apple Notes
+
+You can also export your Google Keep backup into Apple Notes. Notes supports RTFD (Rich Text Format Directory) imports of multiple files. Bear (available in the [App Store](https://apps.apple.com/us/app/bear-markdown-notes/id1091189122?mt=12)) can be used to import the Markdown files into it, and export RTF files. This should be easier than tinkering with other tools like Pandoc and creating RTF files directly.
