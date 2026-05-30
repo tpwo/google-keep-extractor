@@ -5,13 +5,23 @@ repos:
   - id: ruff-check
     args: [--fix, --exit-non-zero-on-fix]
   - id: ruff-format
+- repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
+  rev: v2.16.0
+  hooks:
+  - id: pretty-format-yaml
+    args: [--autofix]
+  - id: pretty-format-toml
+    args: [--autofix, --indent=4, --no-sort, --trailing-commas]
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: v6.0.0
   hooks:
   - id: trailing-whitespace
   - id: end-of-file-fixer
   - id: check-docstring-first
+  - id: check-yaml
   - id: debug-statements
+  - id: name-tests-test
+  - id: requirements-txt-fixer
   - id: file-contents-sorter
     files: \.gitignore
   - id: pretty-format-json
