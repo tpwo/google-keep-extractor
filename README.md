@@ -10,9 +10,8 @@ You can export data to a `.zip` or `.tgz` archive which has the following struct
 
 ```
 └── Takeout
-    ├── Keep
-    │   ├── JSON & HTML files, and attachments
-    └── archive_browser.html
+    └── Keep
+        └── JSON & HTML files, and attachments
 ```
 
 Copy `Takeout` folder into root of this repo, and run the script:
