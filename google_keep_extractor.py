@@ -80,17 +80,15 @@ def _get_title_and_date(note: dict[str, object]) -> tuple[str, datetime]:
         raise NotImplementedError
     created_at = datetime.fromtimestamp(timestamp_usec * usec_to_sec)
 
-    if not note[JSON_NOTE_TITLE]:
-        title = ''
-    else:
-        title = note[JSON_NOTE_TITLE].strip()
-        if not isinstance(title, str):
-            raise NotImplementedError
-
+    title_val = note[JSON_NOTE_TITLE]
+    if isinstance(title_val, str) and title_val:
+        title = title_val.strip()
         if note['isArchived']:
             title = f'[ARCHIVED] {title}'
         elif note['isPinned']:
             title = f'[PINNED] {title}'
+    else:
+        title = ''
 
     return title, created_at
 
@@ -107,11 +105,18 @@ def _get_text(note: dict[str, object]) -> str:
             f'Note `{note[JSON_NOTE_TITLE]}` '
             "doesn't have text content. Converting..."
         )
-        if not isinstance(note[JSON_NOTE_LIST], list):
+        list_content = note[JSON_NOTE_LIST]
+        if not isinstance(list_content, list):
             raise NotImplementedError
-        for item in note[JSON_NOTE_LIST]:
-            checkbox = '[x]' if item['isChecked'] else '[ ]'
-            items.append(f'* {checkbox} {item["text"]}')
+        for item in list_content:
+            if not isinstance(item, dict):
+                continue
+            is_checked = item.get('isChecked')
+            text = item.get('text')
+            if not isinstance(text, str):
+                text = ''
+            checkbox = '[x]' if is_checked else '[ ]'
+            items.append(f'* {checkbox} {text}')
         return '\n'.join(items) + '\n'
     else:
         print(
@@ -122,14 +127,28 @@ def _get_text(note: dict[str, object]) -> str:
 
 
 def _get_attachments(note: dict[str, object]) -> list[str]:
-    if 'attachments' in note:
-        return [attachment['filePath'] for attachment in note['attachments']]
+    attachments = note.get('attachments')
+    if isinstance(attachments, list):
+        file_paths = []
+        for attachment in attachments:
+            if isinstance(attachment, dict):
+                file_path = attachment.get('filePath')
+                if isinstance(file_path, str):
+                    file_paths.append(file_path)
+        return file_paths
     return []
 
 
 def _get_labels(note: dict[str, object]) -> list[str]:
-    if 'labels' in note:
-        return [label['name'] for label in note['labels']]
+    labels = note.get('labels')
+    if isinstance(labels, list):
+        names = []
+        for label in labels:
+            if isinstance(label, dict):
+                name = label.get('name')
+                if isinstance(name, str):
+                    names.append(name)
+        return names
     return []
 
 
