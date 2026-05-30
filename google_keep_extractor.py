@@ -6,6 +6,7 @@ import pathlib
 import re
 import shutil
 from datetime import datetime
+from datetime import timezone
 
 TITLE_TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 FILE_TIME_FORMAT = '%Y-%m-%d_%H-%M-%S'
@@ -78,7 +79,9 @@ def _get_title_and_date(note: dict[str, object]) -> tuple[str, datetime]:
     timestamp_usec = note['createdTimestampUsec']
     if not isinstance(timestamp_usec, int):
         raise NotImplementedError
-    created_at = datetime.fromtimestamp(timestamp_usec * usec_to_sec)
+    created_at = datetime.fromtimestamp(
+        timestamp_usec * usec_to_sec, tz=timezone.utc
+    )
 
     title_val = note[JSON_NOTE_TITLE]
     if isinstance(title_val, str) and title_val:
