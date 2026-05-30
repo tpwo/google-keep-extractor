@@ -1,1 +1,16 @@
-{"attachments":[{"filePath":"1780155940251.1496388760.png","mimetype":"image/png"}],"color":"DEFAULT","isTrashed":false,"isPinned":false,"isArchived":false,"textContent":"","title":"","userEditedTimestampUsec":1780155941217000,"createdTimestampUsec":1780155941217000}
+{
+  "attachments": [
+    {
+      "filePath": "1780155940251.1496388760.png",
+      "mimetype": "image/png"
+    }
+  ],
+  "color": "DEFAULT",
+  "isTrashed": false,
+  "isPinned": false,
+  "isArchived": false,
+  "textContent": "",
+  "title": "",
+  "userEditedTimestampUsec": 1780155941217000,
+  "createdTimestampUsec": 1780155941217000
+}

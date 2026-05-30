@@ -14,6 +14,8 @@ repos:
   - id: debug-statements
   - id: file-contents-sorter
     files: \.gitignore
+  - id: pretty-format-json
+    args: [--autofix, --indent=2, --no-sort-keys]
 - repo: https://github.com/pre-commit/mirrors-mypy
   rev: v2.1.0
   hooks:

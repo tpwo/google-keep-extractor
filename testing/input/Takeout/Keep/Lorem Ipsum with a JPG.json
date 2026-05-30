@@ -1,1 +1,17 @@
-{"attachments":[{"filePath":"1780152699447.562054133.jpg","mimetype":"image/jpeg"}],"color":"DEFAULT","isTrashed":false,"isPinned":false,"isArchived":false,"textContent":"A JPG image is attached to this note.","title":"Lorem Ipsum with a JPG","userEditedTimestampUsec":1780152705715000,"createdTimestampUsec":1780152685900000,"textContentHtml":"<p dir=\"ltr\" style=\"line-height:1.38;margin-top:0.0pt;margin-bottom:0.0pt;\"><span style=\"font-size:7.2pt;font-family:'Google Sans';color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:underline;-webkit-text-decoration-skip:none;text-decoration-skip-ink:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;\">A JPG image is attached to this note.<\/span><\/p>"}
+{
+  "attachments": [
+    {
+      "filePath": "1780152699447.562054133.jpg",
+      "mimetype": "image/jpeg"
+    }
+  ],
+  "color": "DEFAULT",
+  "isTrashed": false,
+  "isPinned": false,
+  "isArchived": false,
+  "textContent": "A JPG image is attached to this note.",
+  "title": "Lorem Ipsum with a JPG",
+  "userEditedTimestampUsec": 1780152705715000,
+  "createdTimestampUsec": 1780152685900000,
+  "textContentHtml": "<p dir=\"ltr\" style=\"line-height:1.38;margin-top:0.0pt;margin-bottom:0.0pt;\"><span style=\"font-size:7.2pt;font-family:'Google Sans';color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:underline;-webkit-text-decoration-skip:none;text-decoration-skip-ink:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;\">A JPG image is attached to this note.</span></p>"
+}
