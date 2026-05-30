@@ -1,6 +1,6 @@
 repos:
 - repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.15.6
+  rev: v0.15.15
   hooks:
   - id: ruff-check
     args: [--fix, --exit-non-zero-on-fix]
@@ -15,6 +15,6 @@ repos:
   - id: file-contents-sorter
     files: \.gitignore
 - repo: https://github.com/pre-commit/mirrors-mypy
-  rev: v1.19.1
+  rev: v2.1.0
   hooks:
   - id: mypy
