@@ -19,7 +19,7 @@ Copy `Takeout` folder into root of this repo, and run the script:
 
     python google_keep_extractor.py
 
-Python 3.8 or later is needed. No additional packages are required.
+Python 3.10 or later is supported. No additional packages are required.
 
 After running the script, Markdown files with timestamp in the filename are created and written to an `export` folder.
 
