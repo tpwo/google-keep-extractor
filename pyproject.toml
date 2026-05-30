@@ -21,6 +21,7 @@ force-single-line = true
 
 [tool.coverage.run]
 plugins = ["covdefaults"]
+omit = ["testing/regenerate_expected.py"]
 
 [tool.coverage.report]
 fail_under = 80
