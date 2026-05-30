@@ -1,5 +1,10 @@
 *.pyc
 *.zip
 .DS_Store
-Takeout/
-export/
+.coverage
+.mypy_cache/
+.ruffle_cache/
+.tox/
+/Takeout/
+/export/
+coverage.xml

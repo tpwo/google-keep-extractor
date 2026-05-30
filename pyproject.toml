@@ -18,3 +18,9 @@ extend-select = [
 [tool.ruff.lint.isort]
 required-imports = ["from __future__ import annotations"]
 force-single-line = true
+
+[tool.coverage.run]
+plugins = ["covdefaults"]
+
+[tool.coverage.report]
+fail_under = 80
