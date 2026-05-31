@@ -27,4 +27,3 @@ regenerate: _tox
 
 _tox:
 	uv tool install tox --with tox-uv
-
