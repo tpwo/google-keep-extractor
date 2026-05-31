@@ -46,14 +46,38 @@ You can also export your Google Keep backup into Apple Notes. Notes supports RTF
 
 ## Development
 
-Run unit tests against all supported Python versions:
+> [!NOTE]
+> `uv` is required for [justfile](justfile) commands to work correctly.
 
-    tox
+Prerequisites:
 
-Measure code coverage:
+* [uv](https://github.com/astral-sh/uv) installed and on `PATH`
+* [just](https://github.com/casey/just) installed and on `PATH`
 
-    tox run -e coverage
+### Installation and testing
+
+Development dependencies are stored in `requirements-dev.txt`. [tox](https://github.com/tox-dev/tox) is used to specify test envs and how to install dependencies.
+
+To install package in the editable mode with dev deps:
+
+    just venv
+
+To run pre-commit checks:
+
+    just pre-commit
+
+To run tests against all supported Python versions:
+
+    just test
+
+To measure code coverage:
+
+    just coverage
+
+To run all the above tests & checks:
+
+    just all
 
 Regenerate expected output after any changes in the extraction process:
 
-    tox run -e regenerate
+    just regenerate
