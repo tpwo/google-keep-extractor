@@ -28,6 +28,7 @@ After running the script, Markdown files with timestamp in the filename are crea
 - Exports notes to individual `.md` files
 - Includes attachments
 - Adds Keep's Labels into the files
+- Extracts note color and background, mapping internal Keep enums to UI names and custom color labels
 - Pinned notes have their titles starting with `[PINNED]`
 - Archived notes have their titles starting with `[ARCHIVED]`
 - Trashed notes are skipped (note that they're included in the backup, but we explicitly skip them)

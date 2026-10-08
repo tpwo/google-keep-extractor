@@ -1,0 +1,19 @@
+{
+  "color": "GRAY",
+  "isTrashed": false,
+  "isPinned": false,
+  "isArchived": false,
+  "textContent": "lorem ipsum  #testcolor dolor sit #label3 amet\n",
+  "title": "Lorem Ipsum with color chalk",
+  "userEditedTimestampUsec": 1791393598900000,
+  "createdTimestampUsec": 1791391282872000,
+  "textContentHtml": "<p dir=\"ltr\" style=\"line-height:1.38;margin-top:0.0pt;margin-bottom:0.0pt;\"><span style=\"font-size:7.2pt;font-family:'Google Sans';color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;\">lorem ipsum&nbsp; #testcolor dolor sit #label3 amet</span></p>",
+  "labels": [
+    {
+      "name": "label3"
+    },
+    {
+      "name": "testcolor"
+    }
+  ]
+}
