@@ -28,10 +28,22 @@ After running the script, Markdown files with timestamp in the filename are crea
 - Exports notes to individual `.md` files
 - Includes attachments
 - Adds Keep's Labels into the files
-- Extracts note color and background, mapping internal Keep enums to UI names and custom color labels
+- Extracts note color, mapping internal Keep enums to UI color names
 - Pinned notes have their titles starting with `[PINNED]`
 - Archived notes have their titles starting with `[ARCHIVED]`
 - Trashed notes are skipped (note that they're included in the backup, but we explicitly skip them)
+
+### Note colors and custom color labels
+
+When a note has an assigned color, the extracted note includes a `Color: <color>` line with its user-facing Keep color name (e.g. `coral`, `mint`, `fog`). Notes with the default color omit this line.
+
+You can configure color label behavior at the top of `google_keep_extractor.py`:
+
+- `ADD_CUSTOM_COLOR_LABELS`: Defaults to `True`. Automatically adds a custom label derived from the note's color to its labels (e.g., `color_coral`), making notes easily filterable and searchable by color in tools like Obsidian. Set to `False` to disable.
+- `COLOR_LABEL_PREFIX`: Prefix prepended to custom color labels (defaults to `'color_'`).
+
+> [!NOTE]
+> Google Keep Takeout exports currently do not include background theme or image metadata, so note backgrounds cannot be extracted.
 
 Inspect [testing](testing) folder to see sample Keep backup files and output produced for it by this tool.
 

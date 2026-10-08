@@ -1,13 +1,22 @@
 from __future__ import annotations
 
 import dataclasses
+import enum
 import json
 import pathlib
 import re
 import shutil
-import warnings
+import sys
 from datetime import datetime
 from datetime import timezone
+
+if sys.version_info >= (3, 11):
+    from enum import StrEnum
+else:
+
+    class StrEnum(str, enum.Enum):
+        pass
+
 
 TITLE_TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 FILE_TIME_FORMAT = '%Y-%m-%d_%H-%M-%S'
@@ -15,79 +24,29 @@ FILE_TIME_FORMAT = '%Y-%m-%d_%H-%M-%S'
 IMPORT_PATH = pathlib.Path('Takeout/Keep')
 EXPORT_PATH = pathlib.Path('export')
 
+# Configuration for custom color labels
+ADD_CUSTOM_COLOR_LABELS = True
+COLOR_LABEL_PREFIX = 'color_'
+
 JSON_NOTE_TITLE = 'title'
 JSON_NOTE_TEXT = 'textContent'
 JSON_NOTE_LIST = 'listContent'
 JSON_NOTE_COLOR = 'color'
 
-DEFAULT_COLOR = 'DEFAULT'
 
-COLOR_LABEL_PREFIX = 'color_'
-BACKGROUND_LABEL_PREFIX = 'background_'
-
-# Map Google Keep internal color enums to Keep UI color names
-COLOR_NAME_MAP: dict[str, str] = {
-    'RED': 'coral',
-    'ORANGE': 'peach',
-    'YELLOW': 'sand',
-    'GREEN': 'mint',
-    'TEAL': 'sage',
-    'BLUE': 'fog',
-    'CERULEAN': 'storm',
-    'PURPLE': 'dusk',
-    'PINK': 'blossom',
-    'BROWN': 'clay',
-    'GRAY': 'chalk',
-}
-
-# User-configurable mapping from internal color (or UI name) to
-# custom color label. This supports visual sorters who want to assign
-# a specific name, or default to deriving one from the color name.
-COLOR_LABEL_MAP: dict[str, str] = {
-    'RED': f'{COLOR_LABEL_PREFIX}coral',
-    'ORANGE': f'{COLOR_LABEL_PREFIX}peach',
-    'YELLOW': f'{COLOR_LABEL_PREFIX}sand',
-    'GREEN': f'{COLOR_LABEL_PREFIX}mint',
-    'TEAL': f'{COLOR_LABEL_PREFIX}sage',
-    'BLUE': f'{COLOR_LABEL_PREFIX}fog',
-    'CERULEAN': f'{COLOR_LABEL_PREFIX}storm',
-    'PURPLE': f'{COLOR_LABEL_PREFIX}dusk',
-    'PINK': f'{COLOR_LABEL_PREFIX}blossom',
-    'BROWN': f'{COLOR_LABEL_PREFIX}clay',
-    'GRAY': f'{COLOR_LABEL_PREFIX}chalk',
-}
-
-# Example map using user-define custom colors, uncomment to enable
-###
-# COLOR_LABEL_MAP: dict[str, str] = {
-#     'RED': 'rojo',
-#     'ORANGE': 'anaranjado',
-#     'YELLOW': 'amarillo',
-#     'GREEN': 'verde',
-#     'TEAL': 'azulado',
-#     'BLUE': 'cielo',
-#     'CERULEAN': 'noche',
-#     'PURPLE': 'violeta',
-#     'PINK': 'rosa',
-#     'BROWN': 'tierra',
-#     'GRAY': 'piedra',
-# }
-
-# User-configurable mapping from background name to custom background label.
-## FIXME:  Takeout for Keep does not currently implement this
-BACKGROUND_LABEL_MAP: dict[str, str] = {
-    'celebration': f'{BACKGROUND_LABEL_PREFIX}celebration',
-    'food': f'{BACKGROUND_LABEL_PREFIX}food',
-    'groceries': f'{BACKGROUND_LABEL_PREFIX}groceries',
-    'music': f'{BACKGROUND_LABEL_PREFIX}music',
-    'notes': f'{BACKGROUND_LABEL_PREFIX}notes',
-    'places': f'{BACKGROUND_LABEL_PREFIX}places',
-    'recipes': f'{BACKGROUND_LABEL_PREFIX}recipes',
-    'travel': f'{BACKGROUND_LABEL_PREFIX}travel',
-    'video': f'{BACKGROUND_LABEL_PREFIX}video',
-}
-
-ADD_CUSTOM_COLOR_LABELS = True
+class Color(StrEnum):
+    RED = 'coral'
+    ORANGE = 'peach'
+    YELLOW = 'sand'
+    GREEN = 'mint'
+    TEAL = 'sage'
+    BLUE = 'fog'
+    CERULEAN = 'storm'
+    PURPLE = 'dusk'
+    PINK = 'blossom'
+    BROWN = 'clay'
+    GRAY = 'chalk'
+    DEFAULT = 'default'
 
 
 @dataclasses.dataclass
@@ -96,9 +55,8 @@ class Note:
     created_at: datetime
     text: str
     attachments: list[str] = dataclasses.field(default_factory=list)
-    labels: list[str] = dataclasses.field(default_factory=list)
-    color: str | None = None
-    background: str | None = None
+    labels: set[str] = dataclasses.field(default_factory=set)
+    color: Color = Color.DEFAULT
 
 
 def main():
@@ -139,23 +97,9 @@ def _load_note(path: pathlib.Path) -> Note:
             )
         title, created_at = _get_title_and_date(note_obj)
         color = _get_color(note_obj)
-        background = _get_background(note_obj)
         labels = _get_labels(note_obj)
-        if ADD_CUSTOM_COLOR_LABELS:
-            raw_color = note_obj.get(JSON_NOTE_COLOR)
-            if color:
-                custom_color_label = COLOR_LABEL_MAP.get(
-                    raw_color if isinstance(raw_color, str) else '',
-                    COLOR_LABEL_MAP.get(color, f'{COLOR_LABEL_PREFIX}{color}'),
-                )
-                if custom_color_label and custom_color_label not in labels:
-                    labels.append(custom_color_label)
-            if background:
-                custom_bg_label = BACKGROUND_LABEL_MAP.get(
-                    background, f'{BACKGROUND_LABEL_PREFIX}{background}'
-                )
-                if custom_bg_label and custom_bg_label not in labels:
-                    labels.append(custom_bg_label)
+        if ADD_CUSTOM_COLOR_LABELS and color != Color.DEFAULT:
+            labels.add(f'{COLOR_LABEL_PREFIX}{color.value}')
         return Note(
             title=title,
             created_at=created_at,
@@ -163,7 +107,6 @@ def _load_note(path: pathlib.Path) -> Note:
             attachments=_get_attachments(note_obj),
             labels=labels,
             color=color,
-            background=background,
         )
 
 
@@ -235,45 +178,30 @@ def _get_attachments(note: dict[str, object]) -> list[str]:
     return []
 
 
-def _get_labels(note: dict[str, object]) -> list[str]:
+def _get_labels(note: dict[str, object]) -> set[str]:
     labels = note.get('labels')
     if isinstance(labels, list):
-        names = []
+        names = set()
         for label in labels:
             if isinstance(label, dict):
                 name = label.get('name')
                 if isinstance(name, str):
-                    names.append(name)
+                    names.add(name)
         return names
-    return []
+    return set()
 
 
-def _get_color(note: dict[str, object]) -> str | None:
+def _get_color(note: dict[str, object]) -> Color:
     raw_color = note.get(JSON_NOTE_COLOR)
-    if isinstance(raw_color, str) and raw_color and raw_color != DEFAULT_COLOR:
-        return COLOR_NAME_MAP.get(raw_color, raw_color.lower())
-    return None
-
-
-# FIXME: Google Keep Takeout exports currently do not include background
-# theme or image metadata in either JSON or HTML files.
-# If background metadata is encountered in note JSON (or future Takeout
-# schemas), issue a warning indicating background support is experimental,
-# but attempt to extract and add background anyway.
-def _get_background(note: dict[str, object]) -> str | None:
-    for key in ('background', 'backgroundTheme', 'theme'):
-        val = note.get(key)
-        if isinstance(val, str) and val:
-            warnings.warn(
-                f"Background metadata key '{key}' encountered ('{val}'), "
-                'but background extraction is not yet officially supported '
-                'by Google Takeout exports; attempting to add Background '
-                'anyway.',
-                UserWarning,
-                stacklevel=2,
-            )
-            return val.lower()
-    return None
+    if isinstance(raw_color, str) and raw_color:
+        try:
+            return Color[raw_color.upper()]
+        except KeyError:
+            try:
+                return Color(raw_color.lower())
+            except ValueError:
+                pass
+    return Color.DEFAULT
 
 
 def _note_to_str(note: Note) -> str:
@@ -291,15 +219,11 @@ def _note_to_str(note: Note) -> str:
         f'![{pathlib.Path(attachment).name}](attachments/{attachment})'
         for attachment in note.attachments
     )
-    labels_str = f'Labels: {", ".join(note.labels)}' if note.labels else ''
-    color_str = f'Color: {note.color}' if note.color else ''
-
-    # FIXME: Google Keep Takeout currently omits background theme/image
-    # metadata from export files. If background metadata were present and
-    # not None, insert it too (e.g. "Background: groceries"), attempting
-    # to add background anyway.
-    background_str = (
-        f'Background: {note.background}' if note.background else ''
+    labels_str = (
+        f'Labels: {", ".join(sorted(note.labels))}' if note.labels else ''
+    )
+    color_str = (
+        f'Color: {note.color.value}' if note.color != Color.DEFAULT else ''
     )
 
     all_elems = (
@@ -308,7 +232,6 @@ def _note_to_str(note: Note) -> str:
         attachments_str,
         labels_str,
         color_str,
-        background_str,
     )
     existing_elems = []
     for elem in all_elems:

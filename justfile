@@ -1,5 +1,3 @@
-export TOX_WORK_DIR := env_var_or_default("TOX_WORK_DIR", "/tmp/.tox")
-
 # print this help message
 help:
 	just -l
