@@ -26,19 +26,22 @@ def test_main_extraction(tmp_path, monkeypatch):
 
     google_keep_extractor.main()
 
-    generated_files = list(temp_export_dir.rglob('*'))
-    expected_files = list(expected_export_dir.rglob('*'))
+    generated_rel = {
+        path.relative_to(temp_export_dir)
+        for path in temp_export_dir.rglob('*')
+        if path.is_file()
+    }
+    expected_rel = {
+        path.relative_to(expected_export_dir)
+        for path in expected_export_dir.rglob('*')
+        if path.is_file()
+    }
 
-    generated_only_files = [f for f in generated_files if f.is_file()]
-    expected_only_files = [f for f in expected_files if f.is_file()]
+    assert generated_rel == expected_rel
 
-    assert len(generated_only_files) == len(expected_only_files)
-
-    for expected_file in expected_only_files:
-        relative_path = expected_file.relative_to(expected_export_dir)
+    for relative_path in expected_rel:
+        expected_file = expected_export_dir / relative_path
         generated_file = temp_export_dir / relative_path
-
-        assert generated_file.exists(), f'{relative_path} was not generated'
 
         if expected_file.suffix == '.md':
             with open(expected_file, encoding='utf-8') as f:
