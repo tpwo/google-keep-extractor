@@ -51,7 +51,7 @@ def _load_notes(folder: pathlib.Path) -> list[Note]:
         if item.suffix == '.json':
             try:
                 notes.append(_load_note(item))
-            except Exception as err:
+            except Exception as err:  # noqa: BLE001 -- skip any bad note, keep going
                 print(f'Error processing file `{item}`: `{err}`')
     return sorted(notes, key=lambda x: x.created_at, reverse=True)
 
