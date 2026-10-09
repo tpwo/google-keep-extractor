@@ -1,0 +1,24 @@
+{
+  "attachments": [
+    "not a dict",
+    {
+      "filePath": 5,
+      "mimetype": "image/png"
+    },
+    {
+      "mimetype": "image/png"
+    },
+    {
+      "filePath": "1780152657754.481910744.png",
+      "mimetype": "image/png"
+    }
+  ],
+  "color": "DEFAULT",
+  "isTrashed": false,
+  "isPinned": false,
+  "isArchived": false,
+  "textContent": "Only the last attachment is valid.",
+  "title": "Note with malformed attachments",
+  "userEditedTimestampUsec": 1780156460000000,
+  "createdTimestampUsec": 1780156460000000
+}

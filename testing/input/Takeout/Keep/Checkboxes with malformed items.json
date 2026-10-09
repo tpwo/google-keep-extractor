@@ -1,0 +1,20 @@
+{
+  "color": "DEFAULT",
+  "isTrashed": false,
+  "isPinned": false,
+  "isArchived": false,
+  "listContent": [
+    "not a dict",
+    {
+      "text": "valid item",
+      "isChecked": true
+    },
+    {
+      "text": 5,
+      "isChecked": true
+    }
+  ],
+  "title": "Checkboxes with malformed items",
+  "userEditedTimestampUsec": 1780156400000000,
+  "createdTimestampUsec": 1780156400000000
+}
