@@ -10,6 +10,11 @@ import google_keep_extractor
 
 TESTING_DIR = pathlib.Path('testing')
 EXPECTED_EXPORT_DIR = TESTING_DIR / 'expected' / 'export'
+EXPECTED_FILES = sorted(
+    path.relative_to(EXPECTED_EXPORT_DIR)
+    for path in EXPECTED_EXPORT_DIR.rglob('*')
+    if path.is_file()
+)
 
 
 @pytest.fixture
@@ -32,33 +37,33 @@ def export_dir(tmp_path):
         yield temp_export_dir
 
 
-def test_main_extraction(export_dir):
+@pytest.fixture
+def generated_dir(export_dir):
+    """Run the extractor on test input and return the export dir."""
     google_keep_extractor.main()
+    return export_dir
 
-    generated_rel = {
-        path.relative_to(export_dir)
-        for path in export_dir.rglob('*')
+
+def test_generated_file_set(generated_dir):
+    assert EXPECTED_FILES, f'no expected files in {EXPECTED_EXPORT_DIR}'
+
+    generated_rel = sorted(
+        path.relative_to(generated_dir)
+        for path in generated_dir.rglob('*')
         if path.is_file()
-    }
-    expected_rel = {
-        path.relative_to(EXPECTED_EXPORT_DIR)
-        for path in EXPECTED_EXPORT_DIR.rglob('*')
-        if path.is_file()
-    }
+    )
 
-    assert generated_rel == expected_rel
+    assert generated_rel == EXPECTED_FILES
 
-    for relative_path in expected_rel:
-        expected_file = EXPECTED_EXPORT_DIR / relative_path
-        generated_file = export_dir / relative_path
 
-        if expected_file.suffix == '.md':
-            assert generated_file.read_text(
-                encoding='utf-8'
-            ) == expected_file.read_text(encoding='utf-8'), (
-                f'Content mismatch in {relative_path}'
-            )
-        else:
-            assert generated_file.read_bytes() == expected_file.read_bytes(), (
-                f'Binary content mismatch in {relative_path}'
-            )
+@pytest.mark.parametrize('relative_path', EXPECTED_FILES, ids=str)
+def test_generated_file_content(generated_dir, relative_path):
+    expected_file = EXPECTED_EXPORT_DIR / relative_path
+    generated_file = generated_dir / relative_path
+
+    if expected_file.suffix == '.md':
+        assert generated_file.read_text(
+            encoding='utf-8'
+        ) == expected_file.read_text(encoding='utf-8')
+    else:
+        assert generated_file.read_bytes() == expected_file.read_bytes()
