@@ -25,3 +25,16 @@ omit = ["testing/regenerate_expected.py"]
 
 [tool.coverage.report]
 fail_under = 80
+
+[tool.mypy]
+files = ["."]
+strict = true
+exclude = ["^venv/"]
+
+# Don't require typing in tests
+[[tool.mypy.overrides]]
+module = [
+    "tests.*",
+    "testing.*",
+]
+disallow_untyped_defs = false

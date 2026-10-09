@@ -59,10 +59,10 @@ def test_main_extraction(tmp_path, monkeypatch):
             )
         else:
             # Compare binary content for attachments (e.g., images)
-            with open(expected_file, 'rb') as f:
-                expected_content = f.read()
-            with open(generated_file, 'rb') as f:
-                generated_content = f.read()
-            assert generated_content == expected_content, (
+            with open(expected_file, 'rb') as bin_f:
+                expected_bytes = bin_f.read()
+            with open(generated_file, 'rb') as bin_f:
+                generated_bytes = bin_f.read()
+            assert generated_bytes == expected_bytes, (
                 f'Binary content mismatch in {relative_path}'
             )

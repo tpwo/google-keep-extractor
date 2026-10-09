@@ -28,7 +28,7 @@ class Note:
     labels: list[str] = dataclasses.field(default_factory=list)
 
 
-def main():
+def main() -> int:
     EXPORT_PATH.mkdir(exist_ok=True)
     for note in _load_notes(IMPORT_PATH):
         timestamp = note.created_at.strftime(FILE_TIME_FORMAT)
@@ -43,6 +43,7 @@ def main():
         _copy_attachments(note)
         print(f'File `{note_export_path}` saved.')
     print('Export successful!')
+    return 0
 
 
 def _load_notes(folder: pathlib.Path) -> list[Note]:
@@ -180,7 +181,7 @@ def _note_to_str(note: Note) -> str:
     return md_content + '\n'
 
 
-def _copy_attachments(note: Note):
+def _copy_attachments(note: Note) -> None:
     for attachment in note.attachments:
         src_path = IMPORT_PATH / attachment
         dest_path = EXPORT_PATH / 'attachments' / attachment
@@ -190,4 +191,4 @@ def _copy_attachments(note: Note):
 
 
 if __name__ == '__main__':
-    main()
+    raise SystemExit(main())
