@@ -12,14 +12,9 @@ def test_main_extraction(tmp_path, monkeypatch):
     expected_export_dir = testing_dir / 'expected' / 'export'
 
     temp_takeout_dir = tmp_path / 'Takeout' / 'Keep'
-    temp_takeout_dir.mkdir(parents=True)
     temp_export_dir = tmp_path / 'export'
 
-    [
-        shutil.copy(item, temp_takeout_dir)
-        for item in input_dir.iterdir()
-        if item.is_file()
-    ]
+    shutil.copytree(input_dir, temp_takeout_dir)
 
     monkeypatch.setattr(google_keep_extractor, 'IMPORT_PATH', temp_takeout_dir)
     monkeypatch.setattr(google_keep_extractor, 'EXPORT_PATH', temp_export_dir)
@@ -44,18 +39,12 @@ def test_main_extraction(tmp_path, monkeypatch):
         generated_file = temp_export_dir / relative_path
 
         if expected_file.suffix == '.md':
-            with open(expected_file, encoding='utf-8') as f:
-                expected_content = f.read()
-            with open(generated_file, encoding='utf-8') as f:
-                generated_content = f.read()
-            assert generated_content == expected_content, (
+            assert generated_file.read_text(
+                encoding='utf-8'
+            ) == expected_file.read_text(encoding='utf-8'), (
                 f'Content mismatch in {relative_path}'
             )
         else:
-            with open(expected_file, 'rb') as bin_f:
-                expected_bytes = bin_f.read()
-            with open(generated_file, 'rb') as bin_f:
-                generated_bytes = bin_f.read()
-            assert generated_bytes == expected_bytes, (
+            assert generated_file.read_bytes() == expected_file.read_bytes(), (
                 f'Binary content mismatch in {relative_path}'
             )
