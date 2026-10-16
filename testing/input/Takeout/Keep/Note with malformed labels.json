@@ -1,0 +1,19 @@
+{
+  "color": "DEFAULT",
+  "isTrashed": false,
+  "isPinned": false,
+  "isArchived": false,
+  "textContent": "Only the last label is valid.",
+  "title": "Note with malformed labels",
+  "userEditedTimestampUsec": 1780156520000000,
+  "createdTimestampUsec": 1780156520000000,
+  "labels": [
+    "not a dict",
+    {
+      "name": 5
+    },
+    {
+      "name": "Valid label"
+    }
+  ]
+}

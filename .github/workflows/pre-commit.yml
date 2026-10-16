@@ -13,5 +13,5 @@ jobs:
   pre-commit:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v6.0.2
-    - uses: tox-dev/action-pre-commit-uv@v1.0.4
+    - uses: actions/checkout@v7.0.1
+    - uses: tox-dev/action-pre-commit-uv@v1.0.5
