@@ -35,7 +35,7 @@ After running the script, Markdown files with timestamp in the filename are crea
 
 ### Note colors and custom color labels
 
-When a note has an assigned color, the extracted note includes a `Color: <color>` line with its user-facing Keep color name (e.g. `coral`, `mint`, `fog`). Notes with the default color omit this line.
+When a note has an assigned color, it is mapped from Keep's internal color enum to its user-facing UI color name (e.g. `coral`, `mint`, `fog`) and added as a label. Notes with the default color do not receive a color label.
 
 You can configure color label behavior at the top of `google_keep_extractor.py`:
 

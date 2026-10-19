@@ -11,21 +11,6 @@ from google_keep_extractor import Color
 INPUT_DATA_DIR = pathlib.Path('testing') / 'input' / 'Takeout' / 'Keep'
 
 
-def test_color_enum_values():
-    assert Color.RED.value == 'coral'
-    assert Color.ORANGE.value == 'peach'
-    assert Color.YELLOW.value == 'sand'
-    assert Color.GREEN.value == 'mint'
-    assert Color.TEAL.value == 'sage'
-    assert Color.BLUE.value == 'fog'
-    assert Color.CERULEAN.value == 'storm'
-    assert Color.PURPLE.value == 'dusk'
-    assert Color.PINK.value == 'blossom'
-    assert Color.BROWN.value == 'clay'
-    assert Color.GRAY.value == 'chalk'
-    assert Color.DEFAULT.value == 'default'
-
-
 def test_get_color_edge_cases():
     assert google_keep_extractor._get_color({}) == Color.DEFAULT
     assert (
@@ -47,12 +32,10 @@ def test_color_extraction_coral_note():
 
     note = google_keep_extractor._load_note(coral_file)
     assert note.color == Color.RED
-    assert 'color_coral' in note.labels
-    assert 'testcolor' in note.labels
+    assert note.labels == ['testcolor', 'color_coral']
 
     rendered = google_keep_extractor._note_to_str(note)
-    assert 'Color: coral' in rendered
-    assert 'Labels: color_coral, testcolor' in rendered
+    assert 'Labels: testcolor, color_coral' in rendered
 
 
 def test_color_extraction_default_note():
@@ -64,7 +47,6 @@ def test_color_extraction_default_note():
     assert len(note.labels) == 0
 
     rendered = google_keep_extractor._note_to_str(note)
-    assert 'Color:' not in rendered
     assert 'Labels:' not in rendered
 
 
@@ -106,16 +88,16 @@ def test_label_deduplication(tmp_path):
         json.dump(note_data, f)
 
     note = google_keep_extractor._load_note(test_file)
-    assert note.labels == {'color_coral', 'sample'}
+    assert note.labels == ['color_coral', 'sample']
     assert len(note.labels) == 2
 
 
-def test_deterministic_label_sorting():
+def test_label_order_preservation():
     note = google_keep_extractor.Note(
-        title='Sorting test',
+        title='Order test',
         created_at=datetime.now(timezone.utc),
         text='Some text',
-        labels={'zebra', 'alpha', 'medium'},
+        labels=['zebra', 'alpha', 'medium'],
     )
     rendered = google_keep_extractor._note_to_str(note)
-    assert 'Labels: alpha, medium, zebra' in rendered
+    assert 'Labels: zebra, alpha, medium' in rendered

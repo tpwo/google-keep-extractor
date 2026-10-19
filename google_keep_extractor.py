@@ -55,7 +55,7 @@ class Note:
     created_at: datetime
     text: str
     attachments: list[str] = dataclasses.field(default_factory=list)
-    labels: set[str] = dataclasses.field(default_factory=set)
+    labels: list[str] = dataclasses.field(default_factory=list)
     color: Color = Color.DEFAULT
 
 
@@ -100,7 +100,10 @@ def _load_note(path: pathlib.Path) -> Note:
         color = _get_color(note_obj)
         labels = _get_labels(note_obj)
         if ADD_CUSTOM_COLOR_LABELS and color != Color.DEFAULT:
-            labels.add(f'{COLOR_LABEL_PREFIX}{color.value}')
+            color_label = f'{COLOR_LABEL_PREFIX}{color.value}'
+            if color_label not in labels:
+                labels.append(color_label)
+        labels = list(dict.fromkeys(labels))
         return Note(
             title=title,
             created_at=created_at,
@@ -179,17 +182,17 @@ def _get_attachments(note: dict[str, object]) -> list[str]:
     return []
 
 
-def _get_labels(note: dict[str, object]) -> set[str]:
+def _get_labels(note: dict[str, object]) -> list[str]:
     labels = note.get('labels')
     if isinstance(labels, list):
-        names = set()
+        names = []
         for label in labels:
             if isinstance(label, dict):
                 name = label.get('name')
                 if isinstance(name, str):
-                    names.add(name)
+                    names.append(name)
         return names
-    return set()
+    return []
 
 
 def _get_color(note: dict[str, object]) -> Color:
@@ -220,20 +223,8 @@ def _note_to_str(note: Note) -> str:
         f'![{pathlib.Path(attachment).name}](attachments/{attachment})'
         for attachment in note.attachments
     )
-    labels_str = (
-        f'Labels: {", ".join(sorted(note.labels))}' if note.labels else ''
-    )
-    color_str = (
-        f'Color: {note.color.value}' if note.color != Color.DEFAULT else ''
-    )
-
-    all_elems = (
-        f'# {note.title}',
-        note.text,
-        attachments_str,
-        labels_str,
-        color_str,
-    )
+    labels_str = f'Labels: {", ".join(note.labels)}' if note.labels else ''
+    all_elems = f'# {note.title}', note.text, attachments_str, labels_str
     existing_elems = []
     for elem in all_elems:
         if elem:
