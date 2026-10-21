@@ -4,6 +4,7 @@ import json
 import pathlib
 from datetime import datetime
 from datetime import timezone
+from unittest import mock
 
 import google_keep_extractor
 from google_keep_extractor import Color
@@ -50,23 +51,21 @@ def test_color_extraction_default_note():
     assert 'Labels:' not in rendered
 
 
-def test_custom_color_label_toggle(monkeypatch):
+def test_custom_color_label_toggle():
     coral_file = INPUT_DATA_DIR / 'Lorem Ipsum with color coral.json'
-    monkeypatch.setattr(
+    with mock.patch.object(
         google_keep_extractor, 'ADD_CUSTOM_COLOR_LABELS', False
-    )
-
-    note = google_keep_extractor._load_note(coral_file)
+    ):
+        note = google_keep_extractor._load_note(coral_file)
     assert note.color == Color.RED
     assert 'color_coral' not in note.labels
     assert 'testcolor' in note.labels
 
 
-def test_custom_color_label_prefix(monkeypatch):
+def test_custom_color_label_prefix():
     coral_file = INPUT_DATA_DIR / 'Lorem Ipsum with color coral.json'
-    monkeypatch.setattr(google_keep_extractor, 'COLOR_LABEL_PREFIX', 'c_')
-
-    note = google_keep_extractor._load_note(coral_file)
+    with mock.patch.object(google_keep_extractor, 'COLOR_LABEL_PREFIX', 'c_'):
+        note = google_keep_extractor._load_note(coral_file)
     assert note.color == Color.RED
     assert 'c_coral' in note.labels
     assert 'testcolor' in note.labels
